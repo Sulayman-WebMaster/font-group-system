@@ -14,7 +14,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 dotenv.config()
-app.use(cors());
+app.use(cors({
+  origin: 'https://bright-zabaione-58ce05.netlify.app',
+ }));
 app.use(express.json());
 
 // --- MongoDB Setup ---
