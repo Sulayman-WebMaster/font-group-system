@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FaPlus, FaTrash, FaUpload, FaFont } from 'react-icons/fa';
 
 function App() {
+  const server_base = import.meta.env.VITE_BASE_URI
   const [fonts, setFonts] = useState([]);
   const [groups, setGroups] = useState([]);
   const [groupFonts, setGroupFonts] = useState([null]);
@@ -14,12 +15,12 @@ function App() {
   }, []);
 
   const fetchFonts = async () => {
-    const res = await axios.get('http://localhost:3000/fonts');
+    const res = await axios.get(`${server_base}/fonts`);
     setFonts(res.data);
   };
 
   const fetchGroups = async () => {
-    const res = await axios.get('http://localhost:3000/font-groups');
+    const res = await axios.get(`${server_base}/font-groups`);
     setGroups(res.data);
   };
 
@@ -33,7 +34,7 @@ function App() {
     }
 
     try {
-      await axios.post('http://localhost:3000/upload-fonts', formData);
+      await axios.post(`${server_base}/upload-fonts`, formData);
       fetchFonts();
     } catch {
       alert('Upload failed');
@@ -55,7 +56,7 @@ function App() {
     if (selected.length < 2) return setError('Select at least 2 fonts');
 
     try {
-      await axios.post('http://localhost:3000/font-groups', { fonts: selected });
+      await axios.post(`${server_base}/font-groups`, { fonts: selected });
       fetchGroups();
       setGroupFonts([null]);
       setError('');
@@ -65,7 +66,7 @@ function App() {
   };
 
   const handleDeleteGroup = async (id) => {
-    await axios.delete(`http://localhost:3000/font-groups/${id}`);
+    await axios.delete(`${server_base}/font-groups/${id}`);
     fetchGroups();
   };
 
