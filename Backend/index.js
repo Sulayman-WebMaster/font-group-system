@@ -151,9 +151,23 @@ app.put('/font-groups/:id', async (req, res) => {
   if (!updated) return res.status(404).json({ message: 'Group not found' });
   res.json({ message: 'Group updated', group: updated });
 });
+app.put('/update-font-groups', async (req, res) => {
+  const { id, fonts } = req.body;
 
+  if (!id || !fonts || fonts.length < 2) {
+    return res.status(400).json({ message: 'Missing ID or fonts' });
+  }
+
+  const updated = await FontGroup.findByIdAndUpdate(id, { fonts }, { new: true });
+
+  if (!updated) {
+    return res.status(404).json({ message: 'Group not found' });
+  }
+
+  res.json({ message: 'Group updated', updated });
+});
 // Start server
 const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
